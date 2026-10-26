@@ -1,0 +1,22 @@
+node_modules/
+dist/
+build/
+
+# Local secrets and generated config
+config.env
+*.env.local
+.env
+
+# Uploaded images are stored on the API host, not in the repo
+react-quick-restro-api/uploads/
+
+# Local MongoDB data directory
+mongo-data/
+
+# Logs and editor files
+*.log
+npm-debug.log*
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
