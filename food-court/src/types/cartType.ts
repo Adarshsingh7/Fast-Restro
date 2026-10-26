@@ -25,10 +25,25 @@ export interface itemType {
   discount?: number;
 }
 
+/** One choice the customer made, kept as text for the order and receipt. */
+export interface SelectedOption {
+  group: string;
+  choice: string;
+  price: number;
+}
+
 export interface CartItemType {
   item: MenuItem;
   itemId: number;
+  /**
+   * Identifies this line. The same dish ordered with different choices is a
+   * separate line, so this is the item id plus the choices made.
+   */
+  lineId: string;
   quantity: number;
+  selectedOptions: SelectedOption[];
+  /** Base price plus the chosen extras, for one unit. */
+  unitPrice: number;
 }
 
 export interface CartType {

@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useMemo, useState } from "react";
+import { ChangeEvent, FC, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { MapPin, Search, Store, X } from "lucide-react";
 import ProductList from "../components/ProductList";
@@ -10,12 +10,19 @@ import LocalStorageHandler from "../utils/LocalStorageHandler";
 import { useMenusByOwner } from "../features/menuFeatures/useMenusByOwner";
 import { useRestro } from "../features/restro/useRestro";
 import { MenuItem } from "../types/menuType";
+import InstallApp from "../components/InstallApp";
+import { applyRestroManifest } from "../lib/manifest";
 
 const ALL = "all";
 
 // Name, address and logo of the restaurant whose menu this is.
 const RestroHeader: FC<{ restroId: string }> = ({ restroId }) => {
   const { restro } = useRestro(restroId);
+
+  // Name the installable app after this restaurant.
+  useEffect(() => {
+    if (restro) applyRestroManifest(restro);
+  }, [restro]);
 
   return (
     <header className="flex items-center gap-3 px-4 pt-5 pb-4">
@@ -85,6 +92,8 @@ export default function MenuList() {
   const [category, setCategory] = useState(ALL);
 
   const { menus, isLoading } = useMenusByOwner(restroId);
+  const { restro } = useRestro(restroId);
+  const restroName = restro?.restroName;
 
   const categories = useMemo(
     () => [...new Set((menus ?? []).map((m) => m.category).filter(Boolean))].sort(),
@@ -145,6 +154,8 @@ export default function MenuList() {
           )}
         </div>
       </div>
+
+      <InstallApp restroName={restroName} />
 
       {categories.length > 1 && (
         <CategoryBar

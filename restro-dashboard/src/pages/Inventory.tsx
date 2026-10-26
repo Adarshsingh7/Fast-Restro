@@ -30,7 +30,8 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { MenuItem } from "@/types/menuType";
+import { MenuItem, OptionGroup } from "@/types/menuType";
+import OptionGroupEditor from "@/components/OptionGroupEditor";
 
 const CATEGORIES = [
   "appetizer",
@@ -160,6 +161,9 @@ const ItemSheet: FC<{
   const { deleteMenuItem } = useDeleteMenuItem();
   const { openDeleteDialog } = useDialog();
   const [image, setImage] = useState(item?.image ?? "");
+  const [optionGroups, setOptionGroups] = useState<OptionGroup[]>(
+    item?.optionGroups ?? [],
+  );
   const isEdit = !!item;
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
@@ -176,6 +180,17 @@ const ItemSheet: FC<{
       description: String(f.get("description") ?? "").trim(),
     };
     if (image) data.image = image;
+
+    // Drop half-finished rows so an empty name never reaches the API.
+    data.optionGroups = optionGroups
+      .map((g) => ({
+        ...g,
+        name: g.name.trim(),
+        choices: g.choices
+          .map((c) => ({ ...c, name: c.name.trim() }))
+          .filter((c) => c.name),
+      }))
+      .filter((g) => g.name && g.choices.length);
 
     try {
       if (isEdit) {
@@ -282,6 +297,8 @@ const ItemSheet: FC<{
             />
           </Field>
           <PhotoPicker value={image} onChange={setImage} />
+
+          <OptionGroupEditor groups={optionGroups} onChange={setOptionGroups} />
 
           <Button
             type="submit"

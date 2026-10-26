@@ -12,6 +12,15 @@ const orderItemSchema = new Schema({
     type: Schema.Types.Mixed,
     default: {},
   },
+  // What the customer picked, kept as plain text so the order still reads
+  // correctly after the menu item is edited or removed.
+  selectedOptions: [
+    {
+      group: { type: String, trim: true },
+      choice: { type: String, trim: true },
+      price: { type: Number, default: 0 },
+    },
+  ],
   quantity: {
     type: Number,
     required: [true, 'An order item must have a quantity'],

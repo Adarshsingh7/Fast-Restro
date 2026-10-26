@@ -44,8 +44,8 @@ const FloatingCartTab = () => {
     navigate("order");
   };
 
-  const handleRemoveItemFromCart = (itemId: number) => {
-    dispatch(removeItem(itemId));
+  const handleRemoveItemFromCart = (lineId: string) => {
+    dispatch(removeItem(lineId));
   };
 
   if (cart.length === 0) return null;
@@ -126,6 +126,7 @@ const FloatingCartTab = () => {
                           <QuantityButton
                             quantity={cartItem.quantity}
                             itemId={cartItem.itemId}
+                            lineId={cartItem.lineId}
                           />
                         </div>
                       </div>
@@ -141,7 +142,7 @@ const FloatingCartTab = () => {
                             className="font-medium text-indigo-200 hover:text-white"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleRemoveItemFromCart(cartItem.item.itemId);
+                              handleRemoveItemFromCart(cartItem.lineId);
                             }}
                           >
                             Remove

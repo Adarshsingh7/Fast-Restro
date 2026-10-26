@@ -61,6 +61,49 @@ const menuSchema = new mongoose.Schema({
       },
     },
   ],
+  // Choices the customer makes when ordering: a "Size" group where one choice
+  // is required, a "Toppings" group where several may be picked, and so on.
+  // Each choice's price is added to the item's base price.
+  optionGroups: [
+    {
+      name: {
+        type: String,
+        required: [true, 'An option group must have a name'],
+        trim: true,
+        maxlength: [40, 'Option group name must be 40 characters or less'],
+      },
+      // 'single' shows one choice at a time (size), 'multiple' allows many
+      // (toppings).
+      type: {
+        type: String,
+        enum: {
+          values: ['single', 'multiple'],
+          message: 'Option group type must be single or multiple',
+        },
+        default: 'single',
+      },
+      required: {
+        type: Boolean,
+        default: false,
+      },
+      choices: [
+        {
+          name: {
+            type: String,
+            required: [true, 'A choice must have a name'],
+            trim: true,
+            maxlength: [40, 'Choice name must be 40 characters or less'],
+          },
+          // Added to the base price. 0 means no extra charge.
+          price: {
+            type: Number,
+            default: 0,
+            min: [0, 'Extra price cannot be negative'],
+          },
+        },
+      ],
+    },
+  ],
   image: {
     type: String,
     default: 'https://example.com/default-image.jpg', // Default image URL or placeholder image

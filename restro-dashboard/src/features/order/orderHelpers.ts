@@ -33,6 +33,10 @@ export const itemName = (item: OrderItem, menus: MenuItem[] | undefined) => {
   return menus?.find((m) => m._id === item.menuItem)?.name ?? "Unknown item";
 };
 
+/** "Large, Extra cheese" — what the customer picked, for display. */
+export const optionSummary = (item: OrderItem) =>
+  (item.selectedOptions ?? []).map((o) => o.choice).join(", ");
+
 export const variantName = (item: OrderItem) => {
   const v = item.variant as unknown;
   if (!v) return "";

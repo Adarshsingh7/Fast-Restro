@@ -13,6 +13,7 @@ import { useOrderSocket } from "@/features/order/useOrderSocket";
 import {
   formatMoney,
   itemName,
+  optionSummary,
   shortId,
   useOrderActions,
   variantName,
@@ -77,6 +78,11 @@ const NewOrderPopup: FC = () => {
                 {itemName(item, menus)}
                 {variantName(item) && (
                   <span className="text-zinc-500"> ({variantName(item)})</span>
+                )}
+                {optionSummary(item) && (
+                  <span className="block pl-5 text-xs text-zinc-500">
+                    {optionSummary(item)}
+                  </span>
                 )}
               </span>
               <span className="tabular-nums text-zinc-600">

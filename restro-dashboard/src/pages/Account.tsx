@@ -27,6 +27,7 @@ import {
   notificationPermission,
   requestNotificationPermission,
 } from "@/lib/notify";
+import InstallApp from "@/components/InstallApp";
 import {
   Profile,
   useUpdateProfile,
@@ -241,6 +242,8 @@ const Account: FC = () => {
         </form>
       </Card>
 
+      <InstallApp />
+
       <NotificationCard />
 
       {/* Payments */}
@@ -313,7 +316,7 @@ const Account: FC = () => {
       {/* Customer menu link */}
       <Card
         title="Customer menu link"
-        hint="Share this link or put it on a QR code at your tables."
+        hint="Share this link or put it on a QR code at your tables. Customers can add it to their home screen as an app."
       >
         <p className="break-all rounded-lg bg-zinc-50 px-3 py-2 font-mono text-xs text-zinc-700">
           {menuLink}

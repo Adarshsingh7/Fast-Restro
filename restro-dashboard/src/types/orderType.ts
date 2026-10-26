@@ -1,4 +1,11 @@
+export interface SelectedOption {
+  group: string;
+  choice: string;
+  price: number;
+}
+
 export interface OrderItem {
+  selectedOptions?: SelectedOption[];
   menuItem: string | { name: string }; // Assuming it's a MongoDB ObjectId as a string
   variant?: string; // Variant is a mixed type, so we use Record<string, any>
   quantity: number;

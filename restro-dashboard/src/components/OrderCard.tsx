@@ -16,6 +16,7 @@ import { MenuItem } from "@/types/menuType";
 import {
   formatMoney,
   itemName,
+  optionSummary,
   paymentStyles,
   shortId,
   statusLabel,
@@ -106,6 +107,11 @@ const OrderCard: FC<OrderCardProps> = ({
               {itemName(item, menus)}
               {variantName(item) && (
                 <span className="text-zinc-500"> ({variantName(item)})</span>
+              )}
+              {optionSummary(item) && (
+                <span className="block pl-5 text-xs text-zinc-500">
+                  {optionSummary(item)}
+                </span>
               )}
             </span>
             <span className="shrink-0 tabular-nums text-zinc-600">

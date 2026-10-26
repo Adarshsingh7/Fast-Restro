@@ -98,14 +98,14 @@ const CartItem: FC<CartItemProps> = function ({ cartItem }) {
   const dispatch: AppDispatch = useDispatch();
 
   const handleRemoveItemFromCart = function () {
-    dispatch(removeItem(item.itemId));
+    dispatch(removeItem(cartItem.lineId));
   };
 
   useEffect(() => {
     if (cartItem.quantity <= 0) {
-      dispatch(removeItem(item.itemId));
+      dispatch(removeItem(cartItem.lineId));
     }
-  }, [cartItem.quantity, dispatch, item.itemId]);
+  }, [cartItem.quantity, dispatch, cartItem.lineId]);
 
   return (
     <li key={item.itemId} className="flex py-6">
@@ -140,6 +140,7 @@ const CartItem: FC<CartItemProps> = function ({ cartItem }) {
             <QuantityButton
               quantity={cartItem.quantity}
               itemId={cartItem.itemId}
+              lineId={cartItem.lineId}
             />
           </div>
         </div>

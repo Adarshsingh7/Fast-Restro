@@ -319,6 +319,11 @@ const ItemsCard: FC<{ order: Order }> = ({ order }) => {
                 <span className="block truncate font-medium text-gray-900 dark:text-white">
                   {itemName(item, menus)}
                 </span>
+                {(item.selectedOptions?.length ?? 0) > 0 && (
+                  <span className="block text-xs text-gray-500">
+                    {item.selectedOptions!.map((o) => o.choice).join(", ")}
+                  </span>
+                )}
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   {item.quantity} × {money(item.price)}
                 </span>

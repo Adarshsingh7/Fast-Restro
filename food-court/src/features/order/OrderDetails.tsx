@@ -31,21 +31,31 @@ const CartItem: FC<{ item: CartItemType }> = ({ item }) => {
         />
         <div className="flex-1">
           <h5 className="font-medium text-gray-900">{product.name}</h5>
-          <p className="text-sm text-gray-500">{product.category}</p>
+          {item.selectedOptions.length > 0 ? (
+            <p className="text-sm text-gray-500">
+              {item.selectedOptions.map((o) => o.choice).join(", ")}
+            </p>
+          ) : (
+            <p className="text-sm text-gray-500">{product.category}</p>
+          )}
           <p className="text-indigo-600 font-medium mt-1">
-            ₹{product.price.toFixed(2)}
+            ₹{item.unitPrice.toFixed(2)}
           </p>
         </div>
       </div>
 
       <div className="flex items-center justify-between mt-4">
         <div className="flex items-center gap-2">
-          <QuantityButton itemId={item.itemId} quantity={item.quantity} />
+          <QuantityButton
+            itemId={item.itemId}
+            quantity={item.quantity}
+            lineId={item.lineId}
+          />
         </div>
         <div className="text-right">
           <p className="text-gray-500 text-sm">Total</p>
           <p className="text-indigo-600 font-semibold">
-            ₹{(product.price * item.quantity).toFixed(2)}
+            ₹{(item.unitPrice * item.quantity).toFixed(2)}
           </p>
         </div>
       </div>
@@ -107,8 +117,9 @@ const RecipientForm: FC<{
         delivery: "dine-in",
         items: items.map((item) => ({
           menuItem: item.item._id,
-          price: item.item.price,
+          price: item.unitPrice,
           quantity: item.quantity,
+          selectedOptions: item.selectedOptions,
         })),
         recipientName: data.name,
         recipientEmail: data.email,

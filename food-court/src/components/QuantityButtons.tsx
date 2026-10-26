@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store";
 import {
-  addItemToCart,
+  incrementLine,
   removeItemFromCart,
   totalAddedQuantity,
 } from "../slice/cartSlice.ts";
@@ -11,12 +11,17 @@ import { useMenu } from "../features/menuFeatures/useMenu.ts";
 
 interface QuantityButtonProps {
   quantity: number;
+  /** The dish, used for the stock check. */
   itemId: number;
+  /** The cart line being changed: one dish may be in the cart more than once
+   * with different choices. */
+  lineId: string;
 }
 
 const QuantityButton: FC<QuantityButtonProps> = function ({
   quantity,
   itemId,
+  lineId,
 }) {
   const { data } = useMenu();
   const dispatch: AppDispatch = useDispatch();
@@ -24,56 +29,36 @@ const QuantityButton: FC<QuantityButtonProps> = function ({
   const menuItemQuantity =
     data?.find((item) => item.itemId === itemId)?.stock || 0;
   const inStock = menuItemQuantity - currentProductCount;
-  const product = data?.find((item) => item.itemId === itemId);
 
   function handleQuantityChange(amount: number) {
-    if (!product) return;
-    if (amount === 1) {
-      dispatch(addItemToCart(itemId, product));
-    }
-    if (amount === -1) {
-      dispatch(removeItemFromCart(itemId));
-    }
+    if (amount === 1) dispatch(incrementLine(lineId));
+    if (amount === -1) dispatch(removeItemFromCart(lineId));
   }
 
-  // Modern circular design while keeping original functionality
   return (
     <div className="flex items-center justify-end">
-      {quantity > 0 ? (
-        <div className="flex items-center border border-gray-200 rounded-full overflow-hidden">
-          <button
-            onClick={() => handleQuantityChange(-1)}
-            className="w-7 h-7 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600"
-          >
-            <span className="text-sm font-bold">-</span>
-          </button>
+      <div className="flex items-center border border-gray-200 rounded-full overflow-hidden">
+        <button
+          onClick={() => handleQuantityChange(-1)}
+          className="w-7 h-7 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600"
+        >
+          <span className="text-sm font-bold">-</span>
+        </button>
 
-          {/* <input
-            type="number"
-            value={quantity}
-            readOnly
-            className="w-7 text-center text-sm font-medium bg-transparent outline-none"
-          /> */}
-          <span className="w-7 text-center text-sm font-medium bg-transparent outline-none">
-            {quantity}
-          </span>
+        <span className="w-7 text-center text-sm font-medium bg-transparent outline-none">
+          {quantity}
+        </span>
 
-          <button
-            onClick={() => handleQuantityChange(1)}
-            className={`w-7 h-7 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 ${!inStock ? "opacity-50 cursor-not-allowed" : ""}`}
-            disabled={!inStock}
-          >
-            <span className="text-sm font-bold">+</span>
-          </button>
-        </div>
-      ) : (
         <button
           onClick={() => handleQuantityChange(1)}
-          className="px-3 py-1.5 text-xs font-medium text-white bg-[#8BC34A] rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1"
+          className={`w-7 h-7 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 ${
+            !inStock ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={!inStock}
         >
-          Add to cart
+          <span className="text-sm font-bold">+</span>
         </button>
-      )}
+      </div>
     </div>
   );
 };

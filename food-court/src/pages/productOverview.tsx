@@ -71,6 +71,7 @@ function ProductOverview() {
 
 							<QuantityButton
 								itemId={1}
+								lineId='1'
 								quantity={0}
 							/>
 							{/* <span>

@@ -190,6 +190,20 @@ exports.generateBillPDF = (orderData) => {
       doc.text(`₹${total.toFixed(2)}`, 430, y, { width: 70, align: 'right' });
 
       y += 20;
+
+      // The size, toppings and anything else the customer picked.
+      const chosen = (item.selectedOptions || [])
+        .map((o) => o.choice)
+        .join(', ');
+      if (chosen) {
+        doc
+          .fontSize(8)
+          .fillColor('#666666')
+          .text(chosen, 80, y - 6, { width: 210 })
+          .fontSize(9)
+          .fillColor(textColor);
+        y += 12;
+      }
       itemCount++;
     });
 

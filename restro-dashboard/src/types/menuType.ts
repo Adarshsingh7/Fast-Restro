@@ -7,6 +7,22 @@ interface Variant {
   };
 }
 
+interface OptionChoice {
+  name: string;
+  price: number;
+  _id?: string;
+}
+
+/** A set of choices the customer makes, such as Size or Toppings. */
+interface OptionGroup {
+  name: string;
+  /** "single" = pick one (size); "multiple" = pick any (toppings). */
+  type: "single" | "multiple";
+  required: boolean;
+  choices: OptionChoice[];
+  _id?: string;
+}
+
 interface MenuItem {
   _id: string;
   name: string;
@@ -16,6 +32,7 @@ interface MenuItem {
   category: string;
   availability: boolean;
   variants: Variant[];
+  optionGroups?: OptionGroup[];
   image: string;
   ingredients: string[];
   isSpecial: boolean;
@@ -34,4 +51,4 @@ interface MenuItem {
   __v: number;
 }
 
-export type { MenuItem };
+export type { MenuItem, OptionGroup, OptionChoice };
